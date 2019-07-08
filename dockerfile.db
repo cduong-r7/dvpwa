@@ -1,0 +1,27 @@
+FROM python:3.6
+
+ENV POSTGRES_DB sqli
+
+RUN mkdir /app
+
+WORKDIR /app
+
+#COPY ./migrations/* /docker-entrypoint-initdb.d/
+COPY ./migrations/* /entrypointpython.sh/
+
+ARG PROJECT=dvpwa-master
+ARG PROJECT_DIR=~/Users/cduong/desktop/dvpwa-master
+
+ADD requirements.txt /app/ 
+
+RUN pip install -q -r requirements.txt 
+RUN pip install tcell_agent 
+
+COPY . /app 
+
+EXPOSE 8080
+STOPSIGNAL SIGINT 
+
+CMD ./entrypointpython.sh 
+
+
